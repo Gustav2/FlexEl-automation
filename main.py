@@ -1,5 +1,3 @@
-import time
-
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -12,8 +10,6 @@ drive = webdriver.Firefox(options=options)
 
 drive.get(url)
 
-time.sleep(3)
-
 content = BeautifulSoup(drive.page_source, "html.parser")
 
 
@@ -24,7 +20,13 @@ def find_cheapest_time():
 
     for child in cheapest.children:
         if "Kl" in child.getText():
-            return child.getText()
+            unparsed = child.getText().replace(".", "").split(" ")
+            timeinterval = []
+            for i in unparsed:
+                if i.isnumeric():
+                    timeinterval.append(i)
+
+            return timeinterval
 
 
 print(find_cheapest_time())
